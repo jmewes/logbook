@@ -10,10 +10,11 @@ import (
 	"time"
 
 	"github.com/experimental-software/logbook2/logging"
+	"github.com/experimental-software/logbook2/utils"
 )
 
 // e.g. /path/to/2026/01/11/18.03_wip
-var searchPathPattern = regexp.MustCompile(`.*[/\\](\d{4})[/\\](\d{2})[/\\](\d{2})[/\\](\d{2})\.(\d{2})_.*`)
+var legacySearchPathPattern = regexp.MustCompile(`.*[/\\](\d{4})[/\\](\d{2})[/\\](\d{2})[/\\](\d{2})\.(\d{2})_.*`)
 
 // e.g. 20250111T1810
 var isoDateTimeBasicFormat = regexp.MustCompile(`^\d{4}\d{2}\d{2}T\d{2}\d{2}$`)
@@ -34,14 +35,21 @@ func Search(baseDirectory, searchTerm string, from time.Time, to time.Time) []Lo
 			if !isLogEntryFile(path) {
 				return nil
 			}
-			pathDatetimeMatch := searchPathPattern.FindStringSubmatch(path)
-			logDatetime := fmt.Sprintf("%s-%s-%sT%s:%s",
-				pathDatetimeMatch[1],
-				pathDatetimeMatch[2],
-				pathDatetimeMatch[3],
-				pathDatetimeMatch[4],
-				pathDatetimeMatch[5],
-			)
+			logDatetime := ""
+			if isLegacyTimeNameConvention(path) {
+				pathDatetimeMatch := legacySearchPathPattern.FindStringSubmatch(path)
+				logDatetime = fmt.Sprintf("%s-%s-%sT%s:%s",
+					pathDatetimeMatch[1],
+					pathDatetimeMatch[2],
+					pathDatetimeMatch[3],
+					pathDatetimeMatch[4],
+					pathDatetimeMatch[5],
+				)
+			} else {
+				simpleFileName := utils.SimpleFileName(path)
+				logDatetime = utils.ToExtendedFormat(simpleFileName)
+			}
+
 			if !isInRequestedTimeRange(logDatetime, from, to) {
 				return nil
 			}
@@ -83,18 +91,39 @@ func isLogEntryFile(path string) bool {
 	pathParts := strings.Split(path, string(os.PathSeparator))
 	lastPathPart := pathParts[len(pathParts)-1]
 	parentDirectory := pathParts[len(pathParts)-2]
-	if !(regexp.MustCompile(`^\d{2}\.\d{2}_.*`).MatchString(parentDirectory)) {
-		return false
+
+	if regexp.MustCompile(`^\d{2}\.\d{2}_.*`).MatchString(parentDirectory) {
+		// keep support for legacy convention where a log entry file has the slug of parent directory suffix, e.g., /path/to/2025/01/14/19.27_foo/foo.md
+		return isTimestampBasedLogEntryFile(path)
 	}
+
+	simpleFileName := strings.Replace(lastPathPart, ".md", "", -1)
+	return len(isoDateTimeBasicFormat.FindStringSubmatch(simpleFileName)) == 1
+}
+
+func isTimestampBasedLogEntryFile(path string) bool {
+	pathParts := strings.Split(path, string(os.PathSeparator))
+	lastPathPart := pathParts[len(pathParts)-1]
+	parentDirectory := pathParts[len(pathParts)-2]
+
 	parentDirectorySlug := parentDirectory[6:]
 	simpleFileName := strings.Replace(lastPathPart, ".md", "", -1)
 	if len(isoDateTimeBasicFormat.FindStringSubmatch(simpleFileName)) != 1 && parentDirectorySlug != simpleFileName {
 		return false
 	}
-	pathDatetimeMatch := searchPathPattern.FindStringSubmatch(path)
+	pathDatetimeMatch := legacySearchPathPattern.FindStringSubmatch(path)
 	if len(pathDatetimeMatch) == 6 {
 		return true
 	}
 
+	return false
+}
+
+// the legacy convention was to have the log entry time creation as prefix of the parent directory, e.g., /path/to/2025/01/14/19.27_foo
+func isLegacyTimeNameConvention(path string) bool {
+	pathDatetimeMatch := legacySearchPathPattern.FindStringSubmatch(path)
+	if len(pathDatetimeMatch) == 6 {
+		return true
+	}
 	return false
 }

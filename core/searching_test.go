@@ -61,6 +61,11 @@ func Test_isLogEntryFile(t *testing.T) {
 			expected: true,
 		},
 		{
+			name:     "other valid legacy path",
+			path:     "/Users/john.doe/Logs/2025/01/14/19.27_foo/foo.md",
+			expected: true,
+		},
+		{
 			name:     "logfile entry path",
 			path:     "/Users/john.doe/Logs/2026/07/18/scratch-note/20260718T1446.md",
 			expected: true,
