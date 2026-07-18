@@ -49,6 +49,49 @@ func Test_Search_ignore_unexpected_data(t *testing.T) {
 	fmt.Println(result)
 }
 
+func Test_isLogEntryFile(t *testing.T) {
+	testCases := []struct {
+		name     string
+		path     string
+		expected bool
+	}{
+		{
+			name:     "valid legacy path",
+			path:     "/Users/john.doe/Logs/2026/07/18/14.46_scratch-note/20260718T1446.md",
+			expected: true,
+		},
+		{
+			name:     "other valid legacy path",
+			path:     "/Users/john.doe/Logs/2025/01/14/19.27_foo/foo.md",
+			expected: true,
+		},
+		{
+			name:     "logfile entry path",
+			path:     "/Users/john.doe/Logs/2026/07/18/scratch-note/20260718T1446.md",
+			expected: true,
+		},
+		{
+			name:     "logfile entry sibling path",
+			path:     "/Users/john.doe/Logs/2026/07/18/scratch-note/example.txt",
+			expected: false,
+		},
+		{
+			name:     "parent directory path",
+			path:     "/Users/john.doe/Logs/2026/07",
+			expected: false,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			result := isLogEntryFile(tc.path)
+			if result != tc.expected {
+				t.Errorf("Invalid log entry file test for path '%v'. Expected: %v, got: %v", tc.path, tc.expected, result)
+			}
+		})
+	}
+}
+
 func Test_isInRequestedTimeRange(t *testing.T) {
 
 	testCases := []struct {

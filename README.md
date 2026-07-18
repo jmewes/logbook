@@ -1,6 +1,6 @@
 # Logbook [![Stability: Experimental](https://masterminds.github.io/stability/experimental.svg)](https://masterminds.github.io/stability/experimental.html)
 
-The Logbook project provides a command-line application for Markdown-based chronological note-taking.
+This project allows creating a digital engineering logbook with a command-line program.
 
 ## Setup
 
@@ -70,7 +70,7 @@ logbook2 remove $(logbook2 search --output-format list "${SEARCH_TERM}")
 
 ### Customization
 
-User-specific utilities may be defined with shell features, e.g. this Bash alias and functions on a macOS computer that has VS Code installed:
+User-specific utilities may be defined with shell features, e.g., these Bash alias and functions on a macOS computer that has VS Code installed:
 
 ```sh
 alias log=logbook2
@@ -105,12 +105,19 @@ function adr() {
 ### Component test
 
 ```sh
+# Run all tests
+go test ./...
+```
+
+```sh
+# Run all tests with coverage checks
 go test ./... -coverprofile=./cov.out
 ```
 
 With the help of the [gremlins](https://gremlins.dev/) program, the tests can be executed with mutations:
 
 ```sh
+# Run mutation tests
 gremlins unleash
 ```
 
@@ -143,4 +150,3 @@ https://sonarcloud.io/summary/overall?id=experimental-software_logbook&branch=ma
 - [Joplin](https://joplinapp.org/)
 - [Zettelkasten](https://zettelkasten.de/)
 - [Dendron](https://wiki.dendron.so/)
-

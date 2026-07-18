@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"sort"
 	"strings"
 	"time"
 
@@ -37,6 +38,10 @@ var searchCmd = &cobra.Command{
 		logEntries := core.Search(
 			baseDirectory(), searchTerm(args), from(), to(),
 		)
+
+		sort.Slice(logEntries, func(i, j int) bool {
+			return logEntries[i].DateTime < logEntries[j].DateTime
+		})
 
 		switch outputFormat(cmd) {
 		default:
