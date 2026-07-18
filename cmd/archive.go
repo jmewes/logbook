@@ -20,12 +20,12 @@ var archiveCmd = &cobra.Command{
 			if _, err := os.Stat(path); os.IsNotExist(err) {
 				continue
 			}
-			err := core.Archive(configuration, path)
+			targetDirectoryPath, err := core.Archive(configuration, path)
 			if err != nil {
 				logging.Error("Archive failed", err)
 				os.Exit(1)
 			}
-			fmt.Println(path)
+			fmt.Println(targetDirectoryPath)
 		}
 	},
 }
