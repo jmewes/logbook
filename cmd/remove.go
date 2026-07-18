@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/jmewes/logbook/core"
@@ -22,7 +21,6 @@ var removeCmd = &cobra.Command{
 				logging.Error("Removing logbook entry failed for path: "+path, err)
 				os.Exit(1)
 			}
-			fmt.Println(path)
 		}
 	},
 }

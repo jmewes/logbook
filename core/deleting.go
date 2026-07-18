@@ -1,7 +1,7 @@
 package core
 
 import (
-	"os"
+	"github.com/laurent22/go-trash"
 )
 
 func Remove(sourcePath string) error {
@@ -9,6 +9,8 @@ func Remove(sourcePath string) error {
 	if err != nil {
 		return err
 	}
-	err = os.RemoveAll(sourceDirectoryPath)
+
+	_, err = trash.MoveToTrash(sourceDirectoryPath)
+
 	return err
 }
