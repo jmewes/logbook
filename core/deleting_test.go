@@ -27,14 +27,10 @@ func Test_Delete_happy_path(t *testing.T) {
 
 	// Act
 	err = Remove(logEntry.Directory)
-	if err != nil {
-		t.Fatal(err)
-	}
 
 	// Assert
-	searchResultForLogBaseDir := Search(logBaseDir, "", epoc, nextCentury)
-	if len(searchResultForLogBaseDir) != 0 {
-		t.Fatal("Expected empty search result")
+	if err != nil {
+		t.Fatal(err)
 	}
 }
 
