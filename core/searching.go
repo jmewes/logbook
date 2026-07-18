@@ -9,8 +9,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/experimental-software/logbook2/logging"
-	"github.com/experimental-software/logbook2/utils"
+	"github.com/jmewes/logbook/logging"
+	"github.com/jmewes/logbook/utils"
 )
 
 // e.g. /path/to/2026/01/11/18.03_wip

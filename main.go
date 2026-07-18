@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/experimental-software/logbook2/cmd"
+	"github.com/jmewes/logbook/cmd"
 )
 
 func main() {

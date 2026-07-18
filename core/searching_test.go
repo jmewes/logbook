@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/experimental-software/logbook2/utils"
+	"github.com/jmewes/logbook/utils"
 )
 
 func Test_Search(t *testing.T) {
