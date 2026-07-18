@@ -24,10 +24,8 @@ func logbookEntryRootPath(path string) (string, error) {
 	}
 	re = regexp.MustCompile(`(.*[/\\]\d{4}[/\\]\d{2}[/\\]\d{2}[/\\].*?[/\\]).*`)
 	m = re.FindStringSubmatch(path)
-	if len(m) == 2 {
-		if containsLogbookEntryFile(m[1]) {
-			return m[1], nil
-		}
+	if len(m) == 2 && containsLogbookEntryFile(m[1]) {
+		return m[1], nil
 	}
 	return "", errors.New("invalid logbook entry path: " + path)
 }

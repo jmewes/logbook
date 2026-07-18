@@ -2,7 +2,7 @@ package utils
 
 import "testing"
 
-func Test(t *testing.T) {
+func TestToExtendedFormat(t *testing.T) {
 	datetime := "20260718T1428"
 
 	result := ToExtendedFormat(datetime)
