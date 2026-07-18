@@ -1,6 +1,6 @@
 # Logbook [![Stability: Experimental](https://masterminds.github.io/stability/experimental.svg)](https://masterminds.github.io/stability/experimental.html)
 
-The Logbook project provides a command-line application for Markdown-based chronological note-taking.
+This project allows creating a digital engineering logbook with a command-line program.
 
 ## Setup
 
