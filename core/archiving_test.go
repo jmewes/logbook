@@ -28,7 +28,7 @@ func Test_Archive_happy_path(t *testing.T) {
 	}
 
 	// Act
-	err = Archive(c, logEntry.Directory)
+	_, err = Archive(c, logEntry.Directory)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -65,7 +65,7 @@ func Test_Archive_path_in_subdirectory(t *testing.T) {
 	}
 
 	// Act
-	err = Archive(c, fileInLog)
+	_, err = Archive(c, fileInLog)
 	if err != nil {
 		t.Fatal(err)
 	}

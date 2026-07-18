@@ -8,10 +8,10 @@ import (
 	"github.com/plus3it/gorecurcopy"
 )
 
-func Archive(configuration config.Configuration, sourcePath string) error {
+func Archive(configuration config.Configuration, sourcePath string) (string, error) {
 	sourceDirectoryPath, err := logbookEntryRootPath(sourcePath)
 	if err != nil {
-		return err
+		return "", err
 	}
 	targetDirectoryPath := strings.Replace(
 		sourceDirectoryPath, configuration.LogDirectory, configuration.ArchiveDirectory, 1,
@@ -19,13 +19,13 @@ func Archive(configuration config.Configuration, sourcePath string) error {
 
 	err = os.MkdirAll(targetDirectoryPath, 0777)
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	err = gorecurcopy.CopyDirectory(sourceDirectoryPath, targetDirectoryPath)
 	if err != nil {
-		return err
+		return "", err
 	}
 	err = os.RemoveAll(sourceDirectoryPath)
-	return err
+	return targetDirectoryPath, err
 }
