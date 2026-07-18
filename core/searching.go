@@ -23,6 +23,8 @@ func Search(baseDirectory, searchTerm string, from time.Time, to time.Time) []Lo
 	var result = make([]LogbookEntry, 0)
 
 	maxDepth := strings.Count(baseDirectory, string(os.PathSeparator)) + 4
+	normalizedSearchTerm := strings.ToLower(searchTerm)
+	visitor := newSearchVisitor(&result, maxDepth, normalizedSearchTerm, from, to)
 
 	err := filepath.WalkDir(baseDirectory,
 		func(path string, d fs.DirEntry, err error) error {
@@ -35,20 +37,7 @@ func Search(baseDirectory, searchTerm string, from time.Time, to time.Time) []Lo
 			if !isLogEntryFile(path) {
 				return nil
 			}
-			logDatetime := ""
-			if isLegacyTimeNameConvention(path) {
-				pathDatetimeMatch := legacySearchPathPattern.FindStringSubmatch(path)
-				logDatetime = fmt.Sprintf("%s-%s-%sT%s:%s",
-					pathDatetimeMatch[1],
-					pathDatetimeMatch[2],
-					pathDatetimeMatch[3],
-					pathDatetimeMatch[4],
-					pathDatetimeMatch[5],
-				)
-			} else {
-				simpleFileName := utils.SimpleFileName(path)
-				logDatetime = utils.ToExtendedFormat(simpleFileName)
-			}
+			logDatetime := parseLogDatetime(path)
 
 			if !isInRequestedTimeRange(logDatetime, from, to) {
 				return nil
@@ -77,6 +66,43 @@ func Search(baseDirectory, searchTerm string, from time.Time, to time.Time) []Lo
 		logging.Error("Could not traverse log directory.", err)
 	}
 	return result
+}
+
+func (v searchVisitor) visit(path string, d fs.DirEntry, err error) error {
+
+}
+
+type searchVisitor struct {
+	result     *[]LogbookEntry
+	maxDepth   int
+	searchTerm string
+	from       time.Time
+	to         time.Time
+}
+
+func newSearchVisitor(result *[]LogbookEntry, maxDepth int, searchTerm string, from, to time.Time) searchVisitor {
+	return searchVisitor{
+		result:     result,
+		maxDepth:   maxDepth,
+		searchTerm: searchTerm,
+		from:       from,
+		to:         to,
+	}
+}
+
+func parseLogDatetime(path string) string {
+	if isLegacyTimeNameConvention(path) {
+		pathDatetimeMatch := legacySearchPathPattern.FindStringSubmatch(path)
+		return fmt.Sprintf("%s-%s-%sT%s:%s",
+			pathDatetimeMatch[1],
+			pathDatetimeMatch[2],
+			pathDatetimeMatch[3],
+			pathDatetimeMatch[4],
+			pathDatetimeMatch[5],
+		)
+	}
+	simpleFileName := utils.SimpleFileName(path)
+	return utils.ToExtendedFormat(simpleFileName)
 }
 
 func isInRequestedTimeRange(datetime string, from time.Time, to time.Time) bool {
