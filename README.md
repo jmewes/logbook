@@ -70,7 +70,7 @@ logbook2 remove $(logbook2 search --output-format list "${SEARCH_TERM}")
 
 ### Customization
 
-User-specific utilities may be defined with shell features, e.g. this Bash alias and functions on a macOS computer that has VS Code installed:
+User-specific utilities may be defined with shell features, e.g., this Bash alias and functions on a macOS computer that has VS Code installed:
 
 ```sh
 alias log=logbook2
