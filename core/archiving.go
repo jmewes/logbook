@@ -4,7 +4,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/experimental-software/logbook2/config"
+	"github.com/jmewes/logbook/config"
 	"github.com/plus3it/gorecurcopy"
 )
 

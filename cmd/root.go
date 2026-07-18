@@ -3,12 +3,12 @@ package cmd
 import (
 	"os"
 
-	"github.com/experimental-software/logbook2/config"
+	"github.com/jmewes/logbook/config"
 	"github.com/spf13/cobra"
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "logbook2",
+	Use:   "logbook",
 	Short: "A markdown-based engineering logbook",
 
 	Run: func(cmd *cobra.Command, args []string) {

@@ -4,18 +4,18 @@ This project allows creating a digital engineering logbook with a command-line p
 
 ## Setup
 
-If a computer has the [go command](https://go.dev/dl/) and [Git](https://git-scm.com) installed, the _Logbook_ can be
+If a computer has the [go command](https://go.dev/dl/) and [Git](https://git-scm.com) installed, the Logbook can be
 installed by cloning its Git repository and then running the `go install` command.
 
 ```sh
-git clone git@github.com:experimental-software/logbook.git && cd ./logbook
+git clone git@github.com:jmewes/logbook.git && cd ./logbook
 go install
 ```
 
-Then the program can be executed with the `logbook2` command:
+Then the program can be executed with the `logbook` command:
 
 ```sh
-logbook2
+logbook
 ```
 
 In the `~/.config/logbook/config.yaml` file it can be configured what directories are used for reading and writing log entries.
@@ -36,36 +36,36 @@ archiveDirectory: ~/Archive
 
 ```sh
 # Add logbook entry
-logbook2 add "${TITLE}"
+logbook add "${TITLE}"
 
 # Add logbook entry and open its root directory in a text editor
-${EDITOR} $(logbook2 add "${TITLE}")
+${EDITOR} $(logbook add "${TITLE}")
 ```
 
 ### Search logbook entries
 
 ```sh
-logbook2 search "${SEARCH_TERM}"
+logbook search "${SEARCH_TERM}"
 ```
 
 ### Archive logbook entries
 
 ```sh
 # Archive single logbook entry
-logbook2 archive "${PATH}"
+logbook archive "${PATH}"
 
 # Archive multiple logbook entries
-logbook2 archive $(logbook2 search --output-format list "${SEARCH_TERM}")
+logbook archive $(logbook search --output-format list "${SEARCH_TERM}")
 ```
 
 ### Remove logbook entries
 
 ```sh
 # Remove single logbook entry
-logbook2 remove "${PATH}"
+logbook remove "${PATH}"
 
 # Remove multiple logbook entries
-logbook2 remove $(logbook2 search --output-format list "${SEARCH_TERM}")
+logbook remove $(logbook search --output-format list "${SEARCH_TERM}")
 ```
 
 ### Customization
@@ -73,7 +73,7 @@ logbook2 remove $(logbook2 search --output-format list "${SEARCH_TERM}")
 User-specific utilities may be defined with shell features, e.g., these Bash alias and functions on a macOS computer that has VS Code installed:
 
 ```sh
-alias log=logbook2
+alias log=logbook
 
 # Creates logbook entry with title "Scratch Note" and opens it in VS Code.
 function note() {
@@ -135,11 +135,11 @@ go run main.go search -a
 
 ### Static code analysis
 
-https://sonarcloud.io/summary/overall?id=experimental-software_logbook&branch=main
+https://sonarcloud.io/project/overview?id=jmewes_logbook
 
 ## Alternative projects
 
-- [Paper-based engineering logbook](https://github.com/experimental-software/logbook/wiki/Paper%E2%80%90based-engineering-logbook)
+- [Paper-based engineering logbook](https://github.com/jmewes/logbook/wiki/Paper%E2%80%90based-engineering-logbook)
 - [QOwnNote](https://www.qownnotes.org)
 - [Emacs OrgMode](https://orgmode.org)
 - [Evernote](https://evernote.com)

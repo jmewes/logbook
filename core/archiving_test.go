@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/experimental-software/logbook2/config"
+	"github.com/jmewes/logbook/config"
 )
 
 func Test_Archive_happy_path(t *testing.T) {

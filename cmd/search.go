@@ -9,8 +9,8 @@ import (
 	"time"
 
 	"github.com/aquasecurity/table"
-	"github.com/experimental-software/logbook2/core"
-	"github.com/experimental-software/logbook2/utils"
+	"github.com/jmewes/logbook/core"
+	"github.com/jmewes/logbook/utils"
 	"github.com/spf13/cobra"
 )
 

@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/experimental-software/logbook2/logging"
+	"github.com/jmewes/logbook/logging"
 	"sigs.k8s.io/yaml"
 )
 
