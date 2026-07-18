@@ -26,7 +26,7 @@ func AddLogEntry(baseDirectory, title string, dateTime time.Time) (LogbookEntry,
 		fmt.Sprintf("%d", dateTime.Year()),
 		fmt.Sprintf("%02d", dateTime.Month()),
 		fmt.Sprintf("%02d", dateTime.Day()),
-		fmt.Sprintf("%02d.%02d_%s", dateTime.Hour(), dateTime.Minute(), slug),
+		slug,
 	)
 	err := os.MkdirAll(logDirectoryPath, 0777)
 	if err != nil {

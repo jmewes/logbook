@@ -105,6 +105,10 @@ function adr() {
 ### Component test
 
 ```sh
+go test ./...
+```
+
+```sh
 go test ./... -coverprofile=./cov.out
 ```
 
@@ -143,4 +147,3 @@ https://sonarcloud.io/summary/overall?id=experimental-software_logbook&branch=ma
 - [Joplin](https://joplinapp.org/)
 - [Zettelkasten](https://zettelkasten.de/)
 - [Dendron](https://wiki.dendron.so/)
-
