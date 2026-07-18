@@ -105,16 +105,19 @@ function adr() {
 ### Component test
 
 ```sh
+# Run all tests
 go test ./...
 ```
 
 ```sh
+# Run all tests with coverage checks
 go test ./... -coverprofile=./cov.out
 ```
 
 With the help of the [gremlins](https://gremlins.dev/) program, the tests can be executed with mutations:
 
 ```sh
+# Run mutation tests
 gremlins unleash
 ```
 

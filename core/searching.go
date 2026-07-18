@@ -24,52 +24,12 @@ func Search(baseDirectory, searchTerm string, from time.Time, to time.Time) []Lo
 
 	maxDepth := strings.Count(baseDirectory, string(os.PathSeparator)) + 4
 	normalizedSearchTerm := strings.ToLower(searchTerm)
-	visitor := newSearchVisitor(&result, maxDepth, normalizedSearchTerm, from, to)
+	searchVisitor := newSearchVisitor(&result, maxDepth, normalizedSearchTerm, from, to)
 
-	err := filepath.WalkDir(baseDirectory,
-		func(path string, d fs.DirEntry, err error) error {
-			if err != nil {
-				return err
-			}
-			if d.IsDir() && strings.Count(path, string(os.PathSeparator)) > maxDepth {
-				return fs.SkipDir
-			}
-			if !isLogEntryFile(path) {
-				return nil
-			}
-			logDatetime := parseLogDatetime(path)
-
-			if !isInRequestedTimeRange(logDatetime, from, to) {
-				return nil
-			}
-
-			logEntryFileBytes, err := os.ReadFile(path)
-			if err != nil {
-				return err
-			}
-			logFile := string(logEntryFileBytes)
-			title := strings.Replace(strings.Split(logFile, "\n")[0], "# ", "", 1)
-			if searchTerm != "" && !strings.Contains(strings.ToLower(title), strings.ToLower(searchTerm)) {
-				return nil
-			}
-
-			logDirectory, _ := filepath.Abs(filepath.Dir(path))
-			result = append(result, LogbookEntry{
-				DateTime:  logDatetime,
-				Directory: logDirectory,
-				Title:     title,
-			})
-
-			return nil
-		})
-	if err != nil {
+	if err := filepath.WalkDir(baseDirectory, searchVisitor.collectLogbookEntries); err != nil {
 		logging.Error("Could not traverse log directory.", err)
 	}
 	return result
-}
-
-func (v searchVisitor) visit(path string, d fs.DirEntry, err error) error {
-
 }
 
 type searchVisitor struct {
@@ -88,6 +48,42 @@ func newSearchVisitor(result *[]LogbookEntry, maxDepth int, searchTerm string, f
 		from:       from,
 		to:         to,
 	}
+}
+
+func (v searchVisitor) collectLogbookEntries(path string, d fs.DirEntry, err error) error {
+	if err != nil {
+		return err
+	}
+	if d.IsDir() && strings.Count(path, string(os.PathSeparator)) > v.maxDepth {
+		return fs.SkipDir
+	}
+	if !isLogEntryFile(path) {
+		return nil
+	}
+	logDatetime := parseLogDatetime(path)
+
+	if !isInRequestedTimeRange(logDatetime, v.from, v.to) {
+		return nil
+	}
+
+	logEntryFileBytes, err := os.ReadFile(path)
+	if err != nil {
+		return err
+	}
+	logFile := string(logEntryFileBytes)
+	title := strings.Replace(strings.Split(logFile, "\n")[0], "# ", "", 1)
+	if v.searchTerm != "" && !strings.Contains(strings.ToLower(title), strings.ToLower(v.searchTerm)) {
+		return nil
+	}
+
+	logDirectory, _ := filepath.Abs(filepath.Dir(path))
+	*v.result = append(*v.result, LogbookEntry{
+		DateTime:  logDatetime,
+		Directory: logDirectory,
+		Title:     title,
+	})
+
+	return nil
 }
 
 func parseLogDatetime(path string) string {
