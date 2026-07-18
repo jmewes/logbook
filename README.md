@@ -2,6 +2,12 @@
 
 This project allows creating a digital engineering logbook with a command-line program.
 
+Why is this tool needed? What problem does it solve? It allows keeping track of files and notes for work-in-progress. Keeping focus while solving complex problems: write notes in a plain text editor (distraction-free environment), store files for diagrams, etc. Correlation of notes and files to the work-in-progress. Quick and easy creation/archiving/deleting of new logbook entries.
+
+This helps in getting complex tasks done, writing of documentation and specification, and sometimes even finding screenshots from meetings half a year ago.
+
+Target group: Engineers that have a terminal window open most of the time (e.g., software developers, devops engineers, testers)
+
 ## Setup
 
 If a computer has the [go command](https://go.dev/dl/) and [Git](https://git-scm.com) installed, the Logbook can be
