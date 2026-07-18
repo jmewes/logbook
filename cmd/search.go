@@ -46,6 +46,11 @@ var searchCmd = &cobra.Command{
 		switch outputFormat(cmd) {
 		default:
 			{
+				if len(logEntries) == 0 {
+					fmt.Println("No search results.")
+					return
+				}
+
 				t := table.New(os.Stdout)
 				t.SetHeaders("Date / Time", "Title", "Path")
 				for _, entry := range logEntries {
