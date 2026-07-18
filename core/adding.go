@@ -52,6 +52,11 @@ func AddLogEntry(baseDirectory, title string, dateTime time.Time) (LogbookEntry,
 func slugify(s string) string {
 	result := strings.ToLower(s)
 
+	result = strings.ReplaceAll(result, "ß", "ss")
+	result = strings.ReplaceAll(result, "ü", "ue")
+	result = strings.ReplaceAll(result, "ö", "oe")
+	result = strings.ReplaceAll(result, "ä", "ae")
+
 	result = regexp.MustCompile(`\|`).ReplaceAllString(result, "_")
 	result = regexp.MustCompile(`[^A-Za-z0-9_]`).ReplaceAllString(result, "-")
 	result = regexp.MustCompile(`-_-`).ReplaceAllString(result, "_")
