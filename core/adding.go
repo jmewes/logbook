@@ -5,8 +5,11 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"strconv"
 	"strings"
 	"time"
+
+	"github.com/jmewes/logbook/utils"
 )
 
 var epoc, _ = time.Parse("2006-01-02", "1970-01-01")
@@ -28,6 +31,12 @@ func AddLogEntry(baseDirectory, title string, dateTime time.Time) (LogbookEntry,
 		fmt.Sprintf("%02d", dateTime.Day()),
 		slug,
 	)
+
+	existingEntries := countExistingEntries(logDirectoryPath)
+	if existingEntries > 0 {
+		logDirectoryPath += "_" + strconv.Itoa(existingEntries+1)
+	}
+
 	err := os.MkdirAll(logDirectoryPath, 0777)
 	if err != nil {
 		return LogbookEntry{}, err
@@ -47,6 +56,23 @@ func AddLogEntry(baseDirectory, title string, dateTime time.Time) (LogbookEntry,
 	}
 
 	return LogbookEntry{DateTime: formattedDateTime, Title: title, Directory: logDirectoryPath}, nil
+}
+
+func countExistingEntries(logDirectoryPath string) int {
+	parentDirectory := filepath.Dir(logDirectoryPath)
+	simpleDirName := utils.SimpleDirectoryName(logDirectoryPath)
+
+	parentDirectoryHandle, err := os.ReadDir(parentDirectory)
+	if err != nil {
+		return 0
+	}
+	count := 0
+	for _, entry := range parentDirectoryHandle {
+		if entry.IsDir() && strings.HasPrefix(entry.Name(), simpleDirName) {
+			count++
+		}
+	}
+	return count
 }
 
 func slugify(s string) string {
