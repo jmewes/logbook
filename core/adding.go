@@ -32,7 +32,7 @@ func AddLogEntry(baseDirectory, title string, dateTime time.Time) (LogbookEntry,
 		slug,
 	)
 
-	existingEntries := countExistingEntries(filepath.Dir(logDirectoryPath), utils.SimpleDirectoryName(logDirectoryPath))
+	existingEntries := countExistingEntries(logDirectoryPath)
 	if existingEntries > 0 {
 		logDirectoryPath += "_" + strconv.Itoa(existingEntries+1)
 	}
@@ -58,7 +58,10 @@ func AddLogEntry(baseDirectory, title string, dateTime time.Time) (LogbookEntry,
 	return LogbookEntry{DateTime: formattedDateTime, Title: title, Directory: logDirectoryPath}, nil
 }
 
-func countExistingEntries(parentDirectory string, simpleDirName string) int {
+func countExistingEntries(logDirectoryPath string) int {
+	parentDirectory := filepath.Dir(logDirectoryPath)
+	simpleDirName := utils.SimpleDirectoryName(logDirectoryPath)
+
 	parentDirectoryHandle, err := os.ReadDir(parentDirectory)
 	if err != nil {
 		return 0
