@@ -91,17 +91,6 @@ function note() {
   code "$LOGBOOK_ENTRY"
   code "$LOGBOOK_ENTRY"/*.md
 }
-
-# Create logbook entry with architecture decision record
-function adr() {
-  local SCOPE="$@"
-  local LOGBOOK_ENTRY_DIR=$(log add "ADR: $SCOPE")
-  cp ~/Vorlagen/adr.md $LOGBOOK_ENTRY_DIR/
-  perl -pi -e "s/SCOPE/${SCOPE}/g" $LOGBOOK_ENTRY_DIR/adr.md
-  local TODAY=$(date '+%Y-%m-%d')
-  perl -pi -e "s/DATE/${TODAY}/g" $LOGBOOK_ENTRY_DIR/adr.md
-  code $LOGBOOK_ENTRY_DIR
-}
 ```
 
 – `~/.bash_profile`
