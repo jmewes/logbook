@@ -2,6 +2,7 @@ package core
 
 import (
 	"os"
+	"strings"
 	"testing"
 	"time"
 
@@ -45,10 +46,46 @@ func Test_Archive_happy_path(t *testing.T) {
 }
 
 func Test_Archive_redundant_target_directories(t *testing.T) {
+	logBaseDir := createTempDir()
+	archiveBaseDir := createTempDir()
+	defer func(path string) {
+		_ = os.RemoveAll(logBaseDir)
+		_ = os.RemoveAll(archiveBaseDir)
+	}(logBaseDir)
+
+	c := config.Configuration{
+		LogDirectory:     logBaseDir,
+		ArchiveDirectory: archiveBaseDir,
+	}
+
+	now := time.Now()
+
 	// Given an archived "Just a test" logbook entry
+	firstEntry, err := AddLogEntry(logBaseDir, "Just a test", now)
+	if err != nil {
+		t.Fatal(err)
+	}
+	_, err = Archive(c, firstEntry.Directory)
+	if err != nil {
+		t.Fatal(err)
+	}
+
 	// And a new logbook entry with title "Just a test" has been created
+	secondEntry, err := AddLogEntry(logBaseDir, "Just a test", now)
+	if err != nil {
+		t.Fatal(err)
+	}
+
 	// When the logbook entry gets archived
+	secondArchivePath, err := Archive(c, secondEntry.Directory)
+	if err != nil {
+		t.Fatal(err)
+	}
+
 	// Then the archive directory name has the suffix "_2"
+	if !strings.HasSuffix(secondArchivePath, "_2") {
+		t.Fatalf("Expected archive directory to end with '_2', but got: %s", secondArchivePath)
+	}
 }
 
 func Test_Archive_path_in_subdirectory(t *testing.T) {
