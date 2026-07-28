@@ -1,12 +1,13 @@
 # Logbook [![Stability: Experimental](https://masterminds.github.io/stability/experimental.svg)](https://masterminds.github.io/stability/experimental.html)
 
-This project allows creating a digital engineering logbook with a command-line program.
+The **Logbook** projects provides a command-line program that supports keeping a digital engineering logbook.
+Each logbook entry has a directory with a structure similar to blog posts, with a Markdownfile with an ISO 8601 timestamp that defines the logbook entry.
+This allows to keep notes in the logbook entry file and open the logbook entry directory in a text editor to created arbitray further files and directories, depending on the work in progress.
+The target group are engineers that have a terminal window open most of the time (e.g., software developers, devops engineers, testers).
 
-Why is this tool needed? What problem does it solve? It allows keeping track of files and notes for work-in-progress. Keeping focus while solving complex problems: write notes in a plain text editor (distraction-free environment), store files for diagrams, etc. Correlation of notes and files to the work-in-progress. Quick and easy creation/archiving/deleting of new logbook entries.
-
-This helps in getting complex tasks done, writing of documentation and specification, and sometimes even finding screenshots from meetings half a year ago.
-
-Target group: Engineers that have a terminal window open most of the time (e.g., software developers, devops engineers, testers)
+| :warning: WARNING          |
+|:---------------------------|
+| Currently the program gets only tested on macOS. Probably it works on Linux. Windows is currently not supported.      |
 
 ## Setup
 
@@ -56,6 +57,8 @@ logbook search "${SEARCH_TERM}"
 
 ### Archive logbook entries
 
+With the `archive` command, a logbook entry can be moved into an archive directory, to make it disappearch from search results, unless explicitly requested:
+
 ```sh
 # Archive single logbook entry
 logbook archive "${PATH}"
@@ -66,6 +69,8 @@ logbook archive $(logbook search --output-format list "${SEARCH_TERM}")
 
 ### Remove logbook entries
 
+With the `remove` command, the logbook entry at the given path will be moved in the operating system trash bin:
+
 ```sh
 # Remove single logbook entry
 logbook remove "${PATH}"
@@ -73,6 +78,10 @@ logbook remove "${PATH}"
 # Remove multiple logbook entries
 logbook remove $(logbook search --output-format list "${SEARCH_TERM}")
 ```
+
+**Also see**:
+
+- https://github.com/laurent22/go-trash
 
 ### Customization
 
