@@ -44,6 +44,13 @@ func Test_Archive_happy_path(t *testing.T) {
 	}
 }
 
+func Test_Archive_redundant_target_directories(t *testing.T) {
+	// Given an archived "Just a test" logbook entry
+	// And a new logbook entry with title "Just a test" has been created
+	// When the logbook entry gets archived
+	// Then the archive directory name has the suffix "_2"
+}
+
 func Test_Archive_path_in_subdirectory(t *testing.T) {
 	// Arrange
 	logBaseDir := createTempDir()
