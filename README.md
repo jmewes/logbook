@@ -90,15 +90,31 @@ User-specific utilities may be defined with shell features, e.g., these Bash ali
 ```sh
 alias log=logbook
 
-# Creates logbook entry with title "Scratch Note" and opens it in VS Code.
-function note() {
-  local LOGBOOK_ENTRY_TITLE="$@"
-  if [[ -z "$LOGBOOK_ENTRY_TITLE" ]]; then
-    LOGBOOK_ENTRY_TITLE="Scratch Note"
+# ==============================================================================
+# FUNCTIONS SECTION
+# ==============================================================================
+
+# NAME
+#   note
+#
+# SYNOPSIS
+#   note [<logbook_entry_title>]
+#
+# DESCRIPTION
+#   Creates a logbook entry and opens it in VS Code.
+#
+# PARAMETERS
+#   $@ - logbook_entry_title (String): The title that should be used for the logbook entry (Default: Scratch Note).
+# ==============================================================================
+note() {
+  local logbook_entry_title="$@"
+  local logbook_entry
+  if [[ -z "$logbook_entry_title" ]]; then
+    logbook_entry_title="Scratch Note"
   fi
-  LOGBOOK_ENTRY=$(log add "$LOGBOOK_ENTRY_TITLE")
-  code "$LOGBOOK_ENTRY"
-  code "$LOGBOOK_ENTRY"/*.md
+  logbook_entry=$(log add "$logbook_entry_title")
+  code "$logbook_entry"
+  code "$logbook_entry"/*.md
 }
 ```
 
